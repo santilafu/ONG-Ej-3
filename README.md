@@ -401,3 +401,140 @@ Manejo de relaciones entre entidades
 Correcta gestión de transacciones (beginTransaction, commit, merge)
 
 Funcionamiento completo de la capa de persistencia en una aplicación Java
+
+---
+
+# 📝 Actividad: Consulta HQL embebida en Hibernate
+Gestión de organizaciones y contactos (ONG Salvemos la Tierra)
+
+Este ejercicio consiste en realizar una consulta HQL (Hibernate Query Language) embebida dentro del código Java para obtener los detalles de una organización concreta y todas sus personas de contacto asociadas.
+
+El objetivo es:
+
+1. Crear una sesión de Hibernate.
+
+2. Construir una consulta HQL para obtener datos de varias entidades relacionadas.
+
+3. Ejecutar la consulta y recuperar los resultados.
+
+4. Recorrer los datos y mostrarlos por pantalla.
+
+## 📌 1. Preparación del entorno
+
+Para esta actividad ya teníamos configurados:
+
+- hibernate.cfg.xml
+
+- Las clases de entidad:
+
+  - ClienteONG (padre)
+
+  - PersonaContacto (hijo)
+
+- Relación OneToMany / ManyToOne entre ambas entidades.
+
+Hibernate se encarga de mapear las relaciones y recuperar automáticamente la lista de contactos asociados a una organización.
+
+## 📌 2. ¿Qué es una consulta HQL embebida?
+
+Es una consulta escrita con el lenguaje propio de Hibernate, muy parecido a SQL pero trabajando con clases y objetos, no con tablas.
+
+Ejemplo:
+````hql
+"from ClienteONG where nombreOrganizacion = :nombre"
+````
+
+No usamos nombres de tablas, sino nombres de clases.
+
+La consulta “embebida” significa que va escrita directamente dentro del código Java, no en un XML ni en un archivo externo.
+
+## 📌 3. Consulta HQL para obtener una organización y sus contactos
+
+Queremos obtener los datos de:
+
+**"Salvemos la Infancia" ubicada en España**
+
+Y también cargar sus personas de contacto asociadas.
+
+## 📌 4. Código completo del Main con comentarios
+
+````java
+package org.ong;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import java.util.List;
+
+public class Main {
+public static void main(String[] args) {
+
+        // 1. Cargar configuración y crear SessionFactory
+        Configuration config = new Configuration().configure();
+        SessionFactory sessionFactory = config.buildSessionFactory();
+
+        // 2. Abrir sesión
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        // 3. Consulta HQL embebida
+        // Buscamos la organización "Salvemos la Infancia" de España.
+        // Se usa HQL, trabajando con la clase ClienteONG en lugar de tablas SQL.
+        List<ClienteONG> resultados = session.createQuery(
+                "FROM ClienteONG WHERE nombreOrganizacion = :nombre AND paisOrganizacion = :pais",
+                ClienteONG.class
+        )
+        .setParameter("nombre", "Salvemos la Infancia")
+        .setParameter("pais", "España")
+        .getResultList();
+
+        // 4. Mostrar resultados por pantalla
+        for (ClienteONG org : resultados) {
+
+            // Información de la organización
+            System.out.println("Organización encontrada:");
+            System.out.println(" - ID: " + org.getIdOrganizacion());
+            System.out.println(" - Nombre: " + org.getNombreOrganizacion());
+            System.out.println(" - País: " + org.getPaisOrganizacion());
+            System.out.println(" - Tipo: " + org.getTiposOrganizacion());
+
+            // Personas asociadas
+            System.out.println("   Personas de contacto:");
+            for (PersonaContacto pc : org.getPersonasContacto()) {
+                System.out.println("      * " + pc.getNombre() + " | Tel: " + pc.getTelefono());
+            }
+        }
+
+        // 5. Finalizar transacción y cerrar sesión
+        tx.commit();
+        session.close();
+        sessionFactory.close();
+    }
+}
+`````
+## 📌 5. Resultado esperado
+
+Al ejecutar el programa, Hibernate mostrará:
+
+- La organización encontrada.
+
+- Sus datos.
+
+- La lista completa de personas que tiene asociadas.
+
+Ejemplo:
+```hql
+Organización encontrada:
+- ID: 2
+- Nombre: Salvemos la Infancia
+- País: España
+- Tipo: Privada
+  Personas de contacto:
+    * Diana Ruiz | Tel: 1254892
+    * Laura Montelli | Tel: 54547
+```
+## 👨‍🎓 Autor
+- Santiago Lafuente Hernández
+- 2º DAM – Acceso a Datos
+- (Desarrollo realizado con acompañamiento técnico de ChatGPT)
