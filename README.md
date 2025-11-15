@@ -177,3 +177,109 @@ Santiago Lafuente Hernández
 2º DAM – Acceso a Datos
 
 (Desarrollo realizado con acompañamiento técnico de ChatGPT)
+
+---
+# 📝 Actividad 4: Relación OneToMany entre ClienteONG y PersonaContacto
+## 📌 1. Objetivo de la actividad
+
+En esta parte del proyecto se amplía la funcionalidad creada en la actividad anterior. Ahora la ONG necesita gestionar las personas de contacto asociadas a cada organización.
+Para ello se implementa una relación OneToMany / ManyToOne entre las tablas:
+
+clientesong (padre)
+
+personascontacto (hijo)
+
+Cada organización puede tener varias personas de contacto.
+
+## 📌 2. Estructura implementada
+
+**✔ Clase padre: ClienteONG**
+
+Se añadió un atributo nuevo:
+````java
+@OneToMany(mappedBy = "clienteONG", cascade = CascadeType.ALL)
+private List<PersonaContacto> personasContacto = new ArrayList<>();
+````
+
+Este campo representa todas las personas de contacto asociadas al cliente.
+
+También se añadió un método para poder vincular contactos:
+````java
+public void addPersonaContacto(PersonaContacto persona) {
+personasContacto.add(persona);
+p.setClienteONG(this);
+}
+````
+
+Esto garantiza que la relación se actualiza en ambos sentidos (padre e hijo).
+
+**✔ Clase hija: PersonaContacto**
+
+Se creó una clase nueva con sus campos:
+
+idorganizacion
+
+nombre
+
+telefono
+
+Y su relación con la clase padre:
+````java
+@ManyToOne
+@JoinColumn(name = "idorganizacion")
+private ClienteONG clienteONG;
+````
+
+Esto le dice a Hibernate que cada persona de contacto pertenece a una organización.
+
+## 📌 3. Fichero de configuración hibernate.cfg.xml
+
+Se añadió la nueva clase mapeada:
+```xml
+<mapping class="org.ong.PersonaContacto"/>
+```
+De esta forma Hibernate puede generar o actualizar la tabla personascontacto.
+
+## 📌 4. Pruebas realizadas en Main.java
+
+Se validó la relación creando varias personas de contacto y asociándolas a la misma organización:
+````java
+PersonaContacto p1 = new PersonaContacto("Juan", "666111222");
+PersonaContacto p2 = new PersonaContacto("Marta", "666333444");
+
+cliente.addPersonaContacto(p1);
+cliente.addPersonaContacto(p2);
+
+session.save(cliente);
+transaction.commit();
+````
+
+Hibernate generó correctamente:
+
+la tabla personascontacto
+
+la columna idorganizacion como clave ajena
+
+los registros insertados asociados a la ONG correspondiente
+
+## 📌 5. Resultado final
+
+El sistema ya soporta:
+
+Registrar organizaciones (clientes ONG)
+
+Registrar personas de contacto
+
+Asociar múltiples contactos a una misma ONG
+
+Guardar todo en la base de datos mediante Hibernate
+
+Esta estructura servirá como base para ampliar el proyecto con nuevas funcionalidades, como consultas más complejas o integración con interfaces de usuario.
+
+## ‍🎓 Autor: 
+
+Santiago Lafuente Hernández
+
+2º DAM – Acceso a Datos
+
+---
