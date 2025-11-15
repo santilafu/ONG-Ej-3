@@ -1,4 +1,5 @@
-📘 Proyecto ONG – Hibernate + MySQL (Actividad 3, Unidad 3)
+# 📘 Proyecto ONG – Hibernate + MySQL 
+    (Actividad 3, Unidad 3)
 
 Este proyecto corresponde a la Actividad 3 de la Unidad 3 de Acceso a Datos, donde se desarrolla una pequeña aplicación Java utilizando Hibernate para mapear la tabla clientesong de una base de datos MySQL llamada ONG.
 
@@ -12,15 +13,19 @@ Configurar Hibernate para gestionar la persistencia.
 
 Probar la inserción de datos desde Java.
 
-🔧 Tecnologías utilizadas
+## 🔧 Tecnologías utilizadas
 Herramienta	Uso
+````
 Java 24	Lenguaje de programación
 Hibernate ORM 7.1.7	Mapeo objeto-relacional
 MySQL Server 8.0.44	Gestor de base de datos
 MySQL Connector/J 9.5.0	Conector JDBC
 IntelliJ IDEA Ultimate	Entorno de desarrollo
 Maven	Gestión automática de dependencias
-📂 Estructura del proyecto
+````
+
+## 📂 Estructura del proyecto
+````
 ONG/
 │
 ├─ src/
@@ -35,34 +40,30 @@ ONG/
 │
 ├─ pom.xml
 └─ README.md
+````
 
-🗄️ Base de datos MySQL
+## 🗄️ Base de datos MySQL
+
 Base de datos:
+````sql
 CREATE DATABASE ONG;
 USE ONG;
 
-Tabla creada automáticamente por Hibernate:
+CREATE TABLE clientesong (
+    idorganizacion INT AUTO_INCREMENT PRIMARY KEY,
+    nombreorganizacion VARCHAR(100) NOT NULL,
+    paisorganizacion VARCHAR(100) NOT NULL,
+    tiposorganizacion VARCHAR(100) NOT NULL
+);
+````
 
-clientesong con los campos:
-
-idorganizacion (PK, auto-increment)
-
-nombreorganizacion
-
-paisorganizacion
-
-tiposorganizacion
-
-Hibernate genera la tabla gracias a la propiedad:
-
-<property name="hibernate.hbm2ddl.auto">update</property>
-
-🧩 Entidad Java (ClienteONG.java)
+## 🧩 Entidad Java (ClienteONG.java)
 
 La clase está mapeada mediante anotaciones JPA, cumpliendo lo pedido en el enunciado:
-
+````java
 @Entity
 @Table(name = "clientesong")
+
 public class ClienteONG {
 
     @Id
@@ -99,11 +100,11 @@ public class ClienteONG {
                 '}';
     }
 }
-
-⚙️ Configuración de Hibernate (hibernate.cfg.xml)
+````
+## ⚙️ Configuración de Hibernate (hibernate.cfg.xml)
 
 Archivo ubicado en src/main/resources:
-
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
@@ -125,8 +126,9 @@ Archivo ubicado en src/main/resources:
         <mapping class="org.ong.ClienteONG"/>
     </session-factory>
 </hibernate-configuration>
-
-🚀 Clase Main – Inserción de datos
+```
+## 🚀 Clase Main – Inserción de datos
+````java
 public class Main {
 public static void main(String[] args) {
 
@@ -153,8 +155,8 @@ public static void main(String[] args) {
         System.out.println("Registro insertado correctamente.");
     }
 }
-
-📌 Resultado
+````
+## 📌 Resultado
 
 Al ejecutar la aplicación:
 
@@ -168,22 +170,10 @@ Muestra en consola el SQL generado.
 
 La tabla clientesong contiene el nuevo registro.
 
-📄 Documentación extra entregada
-
-Archivo Aclaración.pdf incluido en el ZIP del ejercicio:
-
-Explicación breve sobre el patrón MVC.
-
-Explicación del desfase objeto-relacional.
-
-Diagrama simple en PDF.
-
-Justificación del uso de Hibernate.
-
-Capturas solicitadas por la actividad (cuando se pidan).
-
-✍️ Autor
+## ✍️ Autor
 
 Santiago Lafuente Hernández
+
 2º DAM – Acceso a Datos
+
 (Desarrollo realizado con acompañamiento técnico de ChatGPT)
