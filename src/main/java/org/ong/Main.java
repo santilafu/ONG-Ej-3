@@ -36,7 +36,7 @@ public class Main {
         session.persist(ong3);
 
         //Modificamos los datos
-        ong2.setNombreOrganizacion("Salvemos a los Mayores");// Modificamos el nombre de la organizacion
+        ong3.setNombreOrganizacion("Salvemos a los Mayores");// Modificamos el nombre de la organizacion
         session.merge(ong2); // Usamos merge para actualizar la entidad existente
 
         //Commit y cierre de sesión
