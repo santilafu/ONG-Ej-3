@@ -77,5 +77,9 @@ public class ClienteONG {
         personasContacto.add(persona);
         persona.setClienteONG(this);
     }
+    public List<PersonaContacto> getPersonasContacto() {
+        return personasContacto;
+    }
+
 
 }
