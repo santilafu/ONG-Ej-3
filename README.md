@@ -283,3 +283,121 @@ Santiago Lafuente Hernández
 2º DAM – Acceso a Datos
 
 ---
+# 📘 Actividad 6 – Gestión de datos de la ONG "Salvemos la Tierra" con Hibernate
+
+En esta actividad se amplía el proyecto ONG desarrollado anteriormente, utilizando Hibernate para cargar, almacenar y modificar datos relacionados con organizaciones y sus personas de contacto.
+
+El objetivo es demostrar el uso de:
+
+- SessionFactory
+
+- Persistencia con entidades JPA
+
+- Relaciones OneToMany / ManyToOne
+
+- Insertar registros
+
+- Modificar registros existentes
+
+- Confirmar transacciones
+
+## 📂 1. Estructura del proyecto
+````
+ONG/
+├── src/
+│   ├── main/java/org/ong/
+│   │     ├── ClienteONG.java
+│   │     ├── PersonaContacto.java
+│   │     └── Main.java
+│   └── main/resources/
+│         └── hibernate.cfg.xml
+└── pom.xml
+````
+## 🧱 2. Entidades utilizadas
+- ClienteONG
+
+Representa a cada organización con sus datos básicos:
+
+- idorganizacion (PK)
+
+- nombreorganizacion
+
+- paisorganizacion
+
+- tiposorganizacion
+
+Define una relación:
+````java
+@OneToMany(mappedBy = "clienteONG")
+````
+
+- Que indica que una organización puede tener muchas personas de contacto.
+
+  - PersonaContacto
+
+  - Representa a cada persona vinculada a una organización.
+
+- Campos:
+
+  -   idcontacto (PK)
+
+  - nombre
+
+  - telefono
+
+- Relación:
+````java
+@ManyToOne
+@JoinColumn(name = "idorganizacion")
+````
+
+Que enlaza cada contacto con su organización correspondiente.
+
+## ⚙️ 3. Configuración de Hibernate (hibernate.cfg.xml)
+
+Se utiliza la misma configuración de la actividad anterior.
+Hibernate se conecta a la BBDD ONG, gestiona las tablas y aplica cambios automáticamente:
+````xml
+<property name="hibernate.hbm2ddl.auto">update</property>
+````
+
+Esto permite que las tablas se creen o actualicen según las entidades.
+
+## 🧠 4. Objetivo de la actividad
+
+Se deben:
+````java
+✔️ Insertar en la tabla clientesong:
+id	nombreorganizacion	paisorganizacion	tiposorganizacion
+1	Salvemos la infancia	España	privada
+2	Salvemos a los ancianos	Italia	privada
+✔️ Insertar en personacontacto:
+id	idorganizacion	nombre	telefono
+1	1	Diana Ruiz	1254892
+2	1	Laura Montelli	54547
+✔️ Modificar la organización número 2:
+"Salvemos a los ancianos"  →  "Salvemos a los mayores"
+````
+
+## 📊 5. Resultado esperado en MySQL
+````sql
+Tabla clientesong
+idorganizacion	nombreorganizacion	paisorganizacion	tiposorganizacion
+1	Salvemos la infancia	España	privada
+2	Salvemos a los mayores	Italia	privada
+Tabla personacontacto
+idcontacto	idorganizacion	nombre	telefono
+1	1	Diana Ruiz	1254892
+2	1	Laura Montelli	54547
+````
+## 📎 6. Conclusión
+
+Esta actividad demuestra:
+
+Inserción y modificación de datos con Hibernate
+
+Manejo de relaciones entre entidades
+
+Correcta gestión de transacciones (beginTransaction, commit, merge)
+
+Funcionamiento completo de la capa de persistencia en una aplicación Java
