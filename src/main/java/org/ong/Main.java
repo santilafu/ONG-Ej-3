@@ -13,8 +13,21 @@ public class Main {
         //Iniciamos una transacción
         Transaction tx = session.beginTransaction();//NO escribe nada en la base de datos hasta que no hagamos commit
         //Creamos un nuevo cliente ONG
-        ClienteONG c = new ClienteONG("Greenpeace", "Internacional", "Medio Ambiente");// No ponemos el id porque es autogenerado.
-        session.persist(c); // Guardamos el cliente ONG en la base de datos
+        // Crear organización
+        ClienteONG ong = new ClienteONG("GreenPeace", "España", "Medioambiente");
+
+// Crear personas de contacto
+        PersonaContacto persona1 = new PersonaContacto("Laura Ruiz", "600123456", ong);
+        PersonaContacto persona2 = new PersonaContacto("Carlos Soto", "612987654", ong);
+
+// Añadir hijos al padre
+        ong.addPersonaContacto(persona1);
+        ong.addPersonaContacto(persona2);
+
+
+// Guardar solo el padre (por cascada se guardan los hijos)
+        session.persist(ong);
+
         tx.commit(); // Hacemos commit para que se escriba en la base de datos
         session.close(); // Cerramos la sesion
         sessionFactory.close(); // Cerramos la fábrica de sesiones

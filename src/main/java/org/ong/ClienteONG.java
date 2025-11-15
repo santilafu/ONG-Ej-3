@@ -3,6 +3,11 @@ package org.ong;
 //Importamos las librerias necesarias
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 @Entity // Indicamos que es una entidad de Hibernate/JPA
 @Table(name = "clientesong") // Indicamos el nombre de la tabla en la base de datos
 
@@ -20,6 +25,10 @@ public class ClienteONG {
 
     @Column(name = "tiposorganizacion")
     private String tiposOrganizacion;
+
+    // Relación OneToMany con PersonaContacto
+    @OneToMany(mappedBy = "clienteONG", cascade = CascadeType.ALL, orphanRemoval = true)// Indicamos que es una relación uno a muchos, cascada para que al eliminar un cliente se eliminen sus contactos y orphanRemoval para eliminar contactos huérfanos
+    private List<PersonaContacto> personasContacto = new ArrayList<>();// Inicializamos la lista para evitar NullPointerException
 
     //Constructor vacio obligatorio para Hibernate
     public ClienteONG() {}
@@ -64,4 +73,9 @@ public class ClienteONG {
                 ", paisOrganizacion=" + paisOrganizacion +
                 ", tiposOrganizacion=" + tiposOrganizacion + "]";
     }
+    public void addPersonaContacto(PersonaContacto persona) {
+        personasContacto.add(persona);
+        persona.setClienteONG(this);
+    }
+
 }

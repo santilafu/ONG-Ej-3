@@ -17,6 +17,7 @@
 
         <!-- Mapeo de entidades -->
         <mapping class="org.ong.ClienteONG"/>
+        <mapping class="org.ong.PersonaContacto"/>
 
     </session-factory>
 </hibernate-configuration>
